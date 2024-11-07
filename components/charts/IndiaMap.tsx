@@ -1,17 +1,24 @@
-import React, { useLayoutEffect, useRef } from 'react';
+import React, { useLayoutEffect, useRef, useEffect } from 'react';
 import * as am5 from '@amcharts/amcharts5';
 import * as am5map from '@amcharts/amcharts5/map';
 import * as am5exporting from "@amcharts/amcharts5/plugins/exporting";
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 import tamilNaduGeoJson from './tamil-nadu-districts.json';
 
-const IndiaMap = ({ data }) => {
+interface IndiaMapProps {
+  data: any[];
+  selectedZones: string[];
+}
+
+const IndiaMap: React.FC<IndiaMapProps> = ({ data, selectedZones }) => {
   const chartRef = useRef(null);
-  const rootRef = useRef(null);
+  const rootRef = useRef<am5.Root | null>(null);
+  const polygonSeriesRef = useRef<am5map.MapPolygonSeries | null>(null);
 
   useLayoutEffect(() => {
     if (!chartRef.current) return;
 
+    // Dispose existing root if it exists
     if (rootRef.current) {
       rootRef.current.dispose();
     }
@@ -38,6 +45,9 @@ const IndiaMap = ({ data }) => {
       })
     );
 
+    polygonSeriesRef.current = polygonSeries;
+
+    // Process and set district data
     const districtData = data.reduce((acc, item) => {
       acc[item.subzone] = (acc[item.subzone] || 0) + item.amount;
       return acc;
@@ -50,47 +60,29 @@ const IndiaMap = ({ data }) => {
       }))
     );
 
-    // Adjust heat map color scheme to use #6774DC as the primary color
     polygonSeries.set("heatRules", [{
       target: polygonSeries.mapPolygons.template,
       dataField: "value",
-      min: am5.color(0xe0e7ff), // Lightened version for low values
-      max: am5.color(0x6774DC), // Primary color for high values
+      min: am5.color(0xe0e7ff),
+      max: am5.color(0x6774DC),
       key: "fill"
     }]);
 
-/*     const heatLegend = chart.children.push(
-      am5.HeatLegend.new(root, {
-        orientation: "vertical",
-        startColor: am5.color(0xe0e7ff), // Lightened version for low values
-        endColor: am5.color(0x6774DC), // Primary color for high values
-        startText: "Low",
-        endText: "High",
-        stepCount: 5
-      })
-    );
-
-    polygonSeries.mapPolygons.template.events.on("pointerover", function (ev) {
-      if (ev.target.dataItem) {
-        heatLegend.set("value", ev.target.dataItem.get("value"));
-      }
-    }); */
-
     chart.set("zoomControl", am5map.ZoomControl.new(root, {}));
 
-    // Set base color and hover color
     polygonSeries.mapPolygons.template.setAll({
       tooltipText: "{Dist_Name}",
       interactive: true,
-      fill: am5.color(0x66B6DC), // Lightened base color
+      fill: am5.color(0x66B6DC),
       strokeWidth: 0.5,
       stroke: am5.color(0xffffff)
     });
 
     polygonSeries.mapPolygons.template.states.create("hover", {
-      fill: am5.color(0x4f5bbd) // Darker version on hover
+      fill: am5.color(0x4f5bbd)
     });
 
+    // Enable exporting
     const exporting = am5exporting.Exporting.new(root, {
       filePrefix: "tamil-nadu-sales-map",
       dataSource: polygonSeries.data.values,
@@ -103,6 +95,19 @@ const IndiaMap = ({ data }) => {
       }
     };
   }, [data]);
+
+  useEffect(() => {
+    if (polygonSeriesRef.current) {
+      polygonSeriesRef.current.mapPolygons.each((polygon) => {
+        const polygonId = polygon.dataItem?.get("Dist_Name"); // Match with GeoJSON's Dist_Name
+        if (polygonId && selectedZones.includes(polygonId)) {
+          polygon.set("fill", am5.color(0x4f5bbd)); // Highlight selected zones
+        } else {
+          polygon.set("fill", am5.color(0x66B6DC)); // Default color for unselected zones
+        }
+      });
+    }
+  }, [selectedZones]);
 
   return (
     <div className="w-full">

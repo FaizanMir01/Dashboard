@@ -12,7 +12,18 @@ import salesData from '@/data/sales_data.json'
 export default function Dashboard() {
   const [data, setData] = useState<SaleData[]>([])
   const [activeTab, setActiveTab] = useState("dashboard")
-  const { filteredData, fromDate, setFromDate, toDate, setToDate, selectedProducts, setSelectedProducts, selectedZones, setSelectedZones, handleFilter } = useFilteredData(data)
+  const { 
+    filteredData, 
+    fromDate, 
+    setFromDate, 
+    toDate, 
+    setToDate, 
+    selectedProducts, 
+    setSelectedProducts, 
+    selectedZones, 
+    setSelectedZones, 
+    handleFilter 
+  } = useFilteredData(data)
 
   useEffect(() => {
     setData(salesData as SaleData[])
@@ -30,7 +41,7 @@ export default function Dashboard() {
         <TabsContent value="dashboard">
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-3">
-              <DashboardContent filteredData={filteredData} />
+              <DashboardContent filteredData={filteredData} selectedZones={selectedZones} />
             </div>
             <div className="lg:col-span-1">
               <FilterPanel

@@ -1,7 +1,7 @@
 import React from 'react'
 import { SaleData } from '@/types/SaleData'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import IndiaMap  from './charts/IndiaMap'
+import IndiaMap from './charts/IndiaMap'
 import { TimewiseSalesChart } from './charts/TimewiseSalesChart'
 import { ProductDiscountwiseChart } from './charts/ProductDiscountwiseChart'
 import { ProductwiseQtyChart } from './charts/ProductwiseQtyChart'
@@ -9,7 +9,12 @@ import { ProductwiseDiscountChart } from './charts/ProductwiseDiscountChart'
 import { GaugeChart } from './charts/GaugeChart'
 import { calculateAverage } from '@/utils/calculations'
 
-export function DashboardContent({ filteredData }: { filteredData: SaleData[] }) {
+interface DashboardContentProps {
+  filteredData: SaleData[];
+  selectedZones: string[];
+}
+
+export function DashboardContent({ filteredData, selectedZones }: DashboardContentProps) {
   const totalSales = filteredData.reduce((acc, item) => acc + item.amount, 0)
   const totalDiscount = filteredData.reduce((acc, item) => acc + item.discount, 0)
   const totalQuantity = filteredData.reduce((acc, item) => acc + item.quantity, 0)
@@ -22,7 +27,7 @@ export function DashboardContent({ filteredData }: { filteredData: SaleData[] })
             <CardTitle>India Map</CardTitle>
           </CardHeader>
           <CardContent>
-            <IndiaMap data={filteredData}  />
+            <IndiaMap data={filteredData} selectedZones={selectedZones} />
           </CardContent>
         </Card>
         <Card className='col-span-2'>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { SaleData } from '@/types/SaleData'
 
 export function useFilteredData(data: SaleData[]) {
@@ -12,7 +12,7 @@ export function useFilteredData(data: SaleData[]) {
     setFilteredData(data)
   }, [data])
 
-  const handleFilter = () => {
+  const handleFilter = useCallback(() => {
     let filtered = data
 
     if (fromDate) {
@@ -32,7 +32,7 @@ export function useFilteredData(data: SaleData[]) {
     }
 
     setFilteredData(filtered)
-  }
+  }, [data, fromDate, toDate, selectedProducts, selectedZones])
 
   return {
     filteredData,

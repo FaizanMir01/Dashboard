@@ -9,7 +9,6 @@ interface IndiaMapProps {
   data: any[];
   selectedZones: string[];
 }
-
 const IndiaMap: React.FC<IndiaMapProps> = ({ data, selectedZones }) => {
   const chartRef = useRef(null);
   const rootRef = useRef<am5.Root | null>(null);
@@ -99,7 +98,10 @@ const IndiaMap: React.FC<IndiaMapProps> = ({ data, selectedZones }) => {
   useEffect(() => {
     if (polygonSeriesRef.current) {
       polygonSeriesRef.current.mapPolygons.each((polygon) => {
-        const polygonId = polygon.dataItem?.get("Dist_Name"); // Match with GeoJSON's Dist_Name
+        const properties = polygon.dataItem?.dataContext as any;
+        const polygonId = properties?.Dist_Name;
+        console.log(polygonId);
+        console.log(selectedZones);
         if (polygonId && selectedZones.includes(polygonId)) {
           polygon.set("fill", am5.color(0x4f5bbd)); // Highlight selected zones
         } else {

@@ -8,7 +8,8 @@ import { ProductwiseQtyChart } from './charts/ProductwiseQtyChart'
 import { ProductwiseDiscountChart } from './charts/ProductwiseDiscountChart'
 import { GaugeChart } from './charts/GaugeChart'
 import { calculateAverage } from '@/utils/calculations'
-
+import { ProductQuantityBarChart } from './charts/ProductQtyBarChart'
+import { MonthlyComparisonChart } from './charts/MonthlyComparisonChart'
 interface DashboardContentProps {
   filteredData: SaleData[];
   selectedZones: string[];
@@ -18,6 +19,8 @@ export function DashboardContent({ filteredData, selectedZones }: DashboardConte
   const totalSales = filteredData.reduce((acc, item) => acc + item.amount, 0)
   const totalDiscount = filteredData.reduce((acc, item) => acc + item.discount, 0)
   const totalQuantity = filteredData.reduce((acc, item) => acc + item.quantity, 0)
+
+  
 
   return (
     <div className="space-y-8">
@@ -91,6 +94,7 @@ export function DashboardContent({ filteredData, selectedZones }: DashboardConte
             <ProductwiseQtyChart data={filteredData} />
           </CardContent>
         </Card>
+        
         <Card>
           <CardHeader>
             <CardTitle>Productwise Discount</CardTitle>
@@ -99,6 +103,24 @@ export function DashboardContent({ filteredData, selectedZones }: DashboardConte
             <ProductwiseDiscountChart data={filteredData} />
           </CardContent>
         </Card>
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <Card>
+                <CardHeader>
+                  <CardTitle>Monthly Sales Comparison</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <MonthlyComparisonChart data={filteredData} />
+                </CardContent>
+              </Card>
+              <Card>
+  <CardHeader>
+    <CardTitle>Product Quantities</CardTitle>
+  </CardHeader>
+  <CardContent>
+    <ProductQuantityBarChart data={filteredData} />
+  </CardContent>
+</Card>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

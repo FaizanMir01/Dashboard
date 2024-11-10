@@ -18,6 +18,20 @@ interface FilterPanelProps {
   data: SaleData[]
 }
 
+// Helper function to format date from yyyy-mm-dd to dd-mm-yyyy
+const formatDateForInput = (dateString: string): string => {
+  if (!dateString) return ''
+  const [year, month, day] = dateString.split('-')
+  return `${day}-${month}-${year}`
+}
+
+// Helper function to parse date from dd-mm-yyyy to yyyy-mm-dd
+const parseDateFromInput = (dateString: string): string => {
+  if (!dateString) return ''
+  const [day, month, year] = dateString.split('-')
+  return `${year}-${month}-${day}`
+}
+
 export function FilterPanel({
   fromDate,
   setFromDate,
@@ -33,6 +47,16 @@ export function FilterPanel({
   const products = Array.from(new Set(data.map(item => item.product)))
   const zones = Array.from(new Set(data.map(item => item.subzone)))
 
+  const handleFromDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formattedDate = formatDateForInput(e.target.value)
+    setFromDate(formattedDate)
+  }
+
+  const handleToDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formattedDate = formatDateForInput(e.target.value)
+    setToDate(formattedDate)
+  }
+
   return (
     <Card>
       <CardHeader>
@@ -40,16 +64,29 @@ export function FilterPanel({
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="space-y-2">
-          <label className="text-sm font-medium">From Date</label>
-          <Input type="date" value={fromDate} onChange={(e) => setFromDate(e.target.value)} className="w-full" />
+          <label htmlFor="fromDate" className="text-sm font-medium">From Date</label>
+          <Input
+            id="fromDate"
+            type="date"
+            value={parseDateFromInput(fromDate)}
+            onChange={handleFromDateChange}
+            className="w-full"
+          />
         </div>
         <div className="space-y-2">
-          <label className="text-sm font-medium">To Date</label>
-          <Input type="date" value={toDate} onChange={(e) => setToDate(e.target.value)} className="w-full" />
+          <label htmlFor="toDate" className="text-sm font-medium">To Date</label>
+          <Input
+            id="toDate"
+            type="date"
+            value={parseDateFromInput(toDate)}
+            onChange={handleToDateChange}
+            className="w-full"
+          />
         </div>
         <div className="space-y-2">
-          <label className="text-sm font-medium">Products</label>
+          <label htmlFor="products" className="text-sm font-medium">Products</label>
           <MultiSelect
+            id="products"
             options={products}
             selected={selectedProducts}
             setSelected={setSelectedProducts}
@@ -57,8 +94,9 @@ export function FilterPanel({
           />
         </div>
         <div className="space-y-2">
-          <label className="text-sm font-medium">Zones</label>
+          <label htmlFor="zones" className="text-sm font-medium">Zones</label>
           <MultiSelect
+            id="zones"
             options={zones}
             selected={selectedZones}
             setSelected={setSelectedZones}

@@ -40,8 +40,8 @@ export function DashboardContent({ filteredData, selectedZones }: DashboardConte
                       <div className="flex justify-between items-center mb-2">
                         <span className="text-2xl font-bold">{totalSales.toFixed(2)}</span>
                       </div>
-                      <div className="w-full bg-muted h-4 rounded-full">
-                        <div className="bg-primary h-4 rounded-full" style={{ width: `${(totalSales / (totalSales * 1.5)) * 100}%` }}></div>
+                      <div className="w-full bg-muted h-6 rounded-full">
+                        <div className="bg-[#2196F3] h-6 rounded-full" style={{ width: `${(totalSales / (totalSales * 1.5)) * 100}%` }}></div>
                       </div>
                     </div>
                     <div>
@@ -49,8 +49,8 @@ export function DashboardContent({ filteredData, selectedZones }: DashboardConte
                       <div className="flex justify-between items-center mb-2">
                         <span className="text-2xl font-bold">{totalDiscount.toFixed(2)}</span>
                       </div>
-                      <div className="w-full bg-muted h-4 rounded-full">
-                        <div className="bg-primary h-4 rounded-full" style={{ width: `${(totalDiscount / totalSales) * 100}%` }}></div>
+                      <div className="w-full bg-muted h-6 rounded-full">
+                        <div className="bg-[#2196F3] h-6 rounded-full" style={{ width: `${(totalDiscount / totalSales) * 100}%` }}></div>
                       </div>
                     </div>
                     <div>
@@ -58,8 +58,8 @@ export function DashboardContent({ filteredData, selectedZones }: DashboardConte
                       <div className="flex justify-between items-center mb-2">
                         <span className="text-2xl font-bold">{totalQuantity}</span>
                       </div>
-                      <div className="w-full bg-muted h-4 rounded-full">
-                        <div className="bg-primary h-4 rounded-full" style={{ width: `${(totalQuantity / (totalQuantity * 1.5)) * 100}%` }}></div>
+                      <div className="w-full bg-muted h-6 rounded-full">
+                        <div className="bg-[#2196F3]  h-6 rounded-full" style={{ width: `${(totalQuantity / (totalQuantity * 1.5)) * 100}%` }}></div>
                       </div>
                     </div>
                   </CardContent>

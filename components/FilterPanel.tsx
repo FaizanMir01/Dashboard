@@ -44,6 +44,7 @@ export function FilterPanel({
   handleFilter,
   data
 }: FilterPanelProps) {
+  
   const products = Array.from(new Set(data.map(item => item.product)))
   const zones = Array.from(new Set(data.map(item => item.subzone)))
 
@@ -56,7 +57,6 @@ export function FilterPanel({
     const formattedDate = formatDateForInput(e.target.value)
     setToDate(formattedDate)
   }
-
   return (
     <Card>
       <CardHeader>

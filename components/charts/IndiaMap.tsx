@@ -97,19 +97,17 @@ const IndiaMap: React.FC<IndiaMapProps> = ({ data, selectedZones }) => {
 
   useEffect(() => {
     if (polygonSeriesRef.current) {
-      polygonSeriesRef.current.mapPolygons.each((polygon) => {
-        const properties = polygon.dataItem?.dataContext as any;
-        const polygonId = properties?.Dist_Name;
-        console.log(polygonId);
-        console.log(selectedZones);
-        if (polygonId && selectedZones.includes(polygonId)) {
-          polygon.set("fill", am5.color(0x4f5bbd)); // Highlight selected zones
-        } else {
-          polygon.set("fill", am5.color(0x66B6DC)); // Default color for unselected zones
-        }
-      });
+        polygonSeriesRef.current.mapPolygons.each((polygon) => {
+            const properties = polygon.dataItem?.dataContext as any;
+            const polygonId = properties?.id || properties?.Dist_Name;  // Adjust based on actual property name
+            if (polygonId && selectedZones.includes(polygonId)) {
+                polygon.set("fill", am5.color(0x4f5bbd)); // Highlight selected zones
+            } else {
+                polygon.set("fill", am5.color(0x66B6DC)); // Default color for unselected zones
+            }
+        });
     }
-  }, [selectedZones]);
+}, [selectedZones]);
 
   return (
     <div className="w-full">

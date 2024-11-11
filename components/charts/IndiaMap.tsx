@@ -93,7 +93,7 @@ const IndiaMap: React.FC<IndiaMapProps> = ({ data, selectedZones }) => {
         rootRef.current.dispose();
       }
     };
-  }, [data]);
+  }, [selectedZones]);
 
   useEffect(() => {
     if (polygonSeriesRef.current) {
@@ -107,7 +107,8 @@ const IndiaMap: React.FC<IndiaMapProps> = ({ data, selectedZones }) => {
             }
         });
     }
-}, [selectedZones]);
+    console.log(selectedZones);
+}, [data]);
 
   return (
     <div className="w-full">

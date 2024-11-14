@@ -99,7 +99,10 @@ const columns: ColumnDef<SaleData>[] = [
         <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
     ),
-    cell: ({ row }) => `$${row.getValue('unitPrice').toFixed(2)}`,
+    cell: ({ row }) => {
+      const value = row.getValue('unitPrice') as number
+      return `$${value.toFixed(2)}`
+    },
   },
   {
     accessorKey: 'amount',
@@ -112,7 +115,10 @@ const columns: ColumnDef<SaleData>[] = [
         <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
     ),
-    cell: ({ row }) => `$${row.getValue('amount').toFixed(2)}`,
+    cell: ({ row }) => {
+      const value = row.getValue('amount') as number
+      return `$${value.toFixed(2)}`
+    },
   },
   {
     accessorKey: 'discount',
@@ -125,7 +131,10 @@ const columns: ColumnDef<SaleData>[] = [
         <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
     ),
-    cell: ({ row }) => `$${row.getValue('discount').toFixed(2)}`,
+    cell: ({ row }) => {
+      const value = row.getValue('discount') as number
+      return `$${value.toFixed(2)}`
+    },
   },
   {
     accessorKey: 'subzone',
@@ -195,7 +204,7 @@ export function ReportContent({ filteredData }: { filteredData: SaleData[] }) {
             <div className="flex gap-4">
               <Input
                 placeholder="Search all columns..."
-                value={globalFilter}
+                value={globalFilter ?? ""}
                 onChange={e => setGlobalFilter(e.target.value)}
                 className="max-w-sm"
               />

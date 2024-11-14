@@ -11,9 +11,9 @@ interface FilterPanelProps {
   toDate: string
   setToDate: (date: string) => void
   selectedProducts: string[]
-  setSelectedProducts: (products: string[]) => void
+  setSelectedProducts: React.Dispatch<React.SetStateAction<string[]>>
   selectedZones: string[]
-  setSelectedZones: (zones: string[]) => void
+  setSelectedZones: React.Dispatch<React.SetStateAction<string[]>>
   handleFilter: () => void
   data: SaleData[]
 }
@@ -57,6 +57,7 @@ export function FilterPanel({
     const formattedDate = formatDateForInput(e.target.value)
     setToDate(formattedDate)
   }
+
   return (
     <Card className='h-[600px]'>
       <CardHeader>

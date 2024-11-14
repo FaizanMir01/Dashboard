@@ -170,10 +170,19 @@ export function ReportContent({ filteredData }: { filteredData: SaleData[] }) {
   })
 
   const exportToCSV = () => {
-    const headers = columns.map(col => col.accessorKey).join(',')
-    const rows = filteredData.map(row => 
-      columns.map(col => row[col.accessorKey as keyof SaleData]).join(',')
-    ).join('\n')
+    const headers = columns
+      .map((col) => (typeof col.header === 'string' ? col.header : col.accessorKey))
+      .join(',')
+    const rows = filteredData
+      .map((row) =>
+        columns
+          .map((col) => {
+            const key = col.accessorKey as keyof SaleData
+            return row[key]
+          })
+          .join(',')
+      )
+      .join('\n')
     const csv = `${headers}\n${rows}`
     const blob = new Blob([csv], { type: 'text/csv' })
     const url = window.URL.createObjectURL(blob)
@@ -205,7 +214,7 @@ export function ReportContent({ filteredData }: { filteredData: SaleData[] }) {
               <Input
                 placeholder="Search all columns..."
                 value={globalFilter ?? ""}
-                onChange={e => setGlobalFilter(e.target.value)}
+                onChange={(e) => setGlobalFilter(e.target.value)}
                 className="max-w-sm"
               />
               <Button onClick={exportToCSV} variant="outline">
@@ -223,9 +232,9 @@ export function ReportContent({ filteredData }: { filteredData: SaleData[] }) {
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
-                {table.getHeaderGroups().map(headerGroup => (
+                {table.getHeaderGroups().map((headerGroup) => (
                   <TableRow key={headerGroup.id}>
-                    {headerGroup.headers.map(header => (
+                    {headerGroup.headers.map((header) => (
                       <TableHead key={header.id}>
                         {header.isPlaceholder
                           ? null
@@ -239,9 +248,9 @@ export function ReportContent({ filteredData }: { filteredData: SaleData[] }) {
                 ))}
               </TableHeader>
               <TableBody>
-                {table.getRowModel().rows.map(row => (
+                {table.getRowModel().rows.map((row) => (
                   <TableRow key={row.id}>
-                    {row.getVisibleCells().map(cell => (
+                    {row.getVisibleCells().map((cell) => (
                       <TableCell key={cell.id}>
                         {flexRender(
                           cell.column.columnDef.cell,

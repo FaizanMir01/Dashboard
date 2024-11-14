@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from "react"
-import { Check, ChevronsUpDown, X } from "lucide-react"
+import { Check, ChevronsUpDown, X } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import {
   Popover,
@@ -10,13 +10,14 @@ import {
 } from "@/components/ui/popover"
 
 interface MultiSelectProps {
+  id?: string // Add this line to include the id prop
   options: string[]
   selected: string[]
   setSelected: React.Dispatch<React.SetStateAction<string[]>>
   placeholder: string
 }
 
-export function MultiSelect({ options, selected, setSelected, placeholder }: MultiSelectProps) {
+export function MultiSelect({ id, options, selected, setSelected, placeholder }: MultiSelectProps) {
   const [open, setOpen] = React.useState(false)
   const [search, setSearch] = React.useState('')
 
@@ -40,6 +41,7 @@ export function MultiSelect({ options, selected, setSelected, placeholder }: Mul
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
+          id={id} // Add this line to use the id prop
           variant="outline"
           role="combobox"
           aria-expanded={open}

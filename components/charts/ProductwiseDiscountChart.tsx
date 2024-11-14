@@ -1,14 +1,18 @@
 'use client'
 
-import React, { useLayoutEffect, useRef } from 'react'
+import React, { useLayoutEffect, useRef, useState } from 'react'
 import * as am5 from '@amcharts/amcharts5'
 import * as am5xy from '@amcharts/amcharts5/xy'
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated'
 import { SaleData } from '@/types/SaleData'
 import * as am5exporting from "@amcharts/amcharts5/plugins/exporting"
+import { Button } from "@/components/ui/button"
+import { ArrowUpDown } from "lucide-react"
+
 export function ProductwiseDiscountChart({ data }: { data: SaleData[] }) {
   const chartRef = useRef<HTMLDivElement>(null)
   const rootRef = useRef<am5.Root | null>(null)
+  const [isAscending, setIsAscending] = useState(false)
 
   useLayoutEffect(() => {
     if (!chartRef.current) return
@@ -68,7 +72,7 @@ export function ProductwiseDiscountChart({ data }: { data: SaleData[] }) {
       })
     )
 
-    // Set data
+    // Process and sort data
     const processedData = Object.entries(
       data.reduce((acc: { [key: string]: number }, item) => {
         acc[item.product] = (acc[item.product] || 0) + item.discount
@@ -79,7 +83,11 @@ export function ProductwiseDiscountChart({ data }: { data: SaleData[] }) {
         product, 
         discount: Number(discount.toFixed(2))
       }))
-      .sort((a, b) => b.discount - a.discount)
+      .sort((a, b) => 
+        isAscending 
+          ? a.discount - b.discount 
+          : b.discount - a.discount
+      )
 
     xAxis.data.setAll(processedData)
     series.data.setAll(processedData)
@@ -104,7 +112,6 @@ export function ProductwiseDiscountChart({ data }: { data: SaleData[] }) {
     // Make stuff animate on load
     series.appear(1000)
     chart.appear(1000, 100)
-
 
     const exportingMenu = am5exporting.ExportingMenu.new(root, {
       container: chart.container,
@@ -144,7 +151,21 @@ export function ProductwiseDiscountChart({ data }: { data: SaleData[] }) {
         rootRef.current.dispose()
       }
     }
-  }, [data])
+  }, [data, isAscending]) // Added isAscending to dependencies
 
-  return <div ref={chartRef} style={{ width: '100%', height: '300px' }}></div>
+  return (
+    <div className="space-y-4">
+      <div className="flex justify-end">
+        <Button
+          onClick={() => setIsAscending(!isAscending)}
+          variant="outline"
+          className="flex items-center gap-2"
+        >
+          <ArrowUpDown className="h-4 w-4" />
+          Sort Discounts {isAscending ? "Descending" : "Ascending"}
+        </Button>
+      </div>
+      <div ref={chartRef} style={{ width: '100%', height: '300px' }}></div>
+    </div>
+  )
 }

@@ -58,7 +58,7 @@ export function FilterPanel({
     setToDate(formattedDate)
   }
   return (
-    <Card>
+    <Card className='h-[600px]'>
       <CardHeader>
         <CardTitle>Filters</CardTitle>
       </CardHeader>

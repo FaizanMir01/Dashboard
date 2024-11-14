@@ -112,7 +112,7 @@ const IndiaMap: React.FC<IndiaMapProps> = ({ data, selectedZones }) => {
 
   return (
     <div className="w-full">
-      <div ref={chartRef} className="h-[600px]" />
+      <div ref={chartRef} className="h-[500px]" />
     </div>
   );
 };

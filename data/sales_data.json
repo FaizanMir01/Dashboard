@@ -206,18 +206,5 @@
         "amount": 7.67,
         "discount": 0,
         "subzone": "Theni"
-    },
-    {
-        "paymentId": 868,
-        "outletId": 9389,
-        "saleDate": "01-09-2023",
-        "saleTime": "2:52 PM",
-        "product": "CHOKY",
-        "sku": "CHOKY26G RS10 24PCS CHOKY13G RS5 12PCS",
-        "quantity": 1,
-        "unitPrice": 216,
-        "amount": 216,
-        "discount": 0,
-        "subzone": "Villupuram"
     }
 ]

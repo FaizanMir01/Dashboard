@@ -1,3 +1,4 @@
+// page.tsx
 'use client'
 
 import React, { useState, useEffect } from 'react'
@@ -39,24 +40,25 @@ export default function Dashboard() {
         </TabsList>
 
         <TabsContent value="dashboard">
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            <div className="lg:col-span-3">
-              <DashboardContent filteredData={filteredData} selectedZones={selectedZones} />
-            </div>
-            <div className="lg:col-span-1">
-              <FilterPanel
-                fromDate={fromDate}
-                setFromDate={setFromDate}
-                toDate={toDate}
-                setToDate={setToDate}
-                selectedProducts={selectedProducts}
-                setSelectedProducts={setSelectedProducts}
-                selectedZones={selectedZones}
-                setSelectedZones={setSelectedZones}
-                handleFilter={handleFilter}
-                data={data}
-              />
-            </div>
+          <div className="space-y-8">
+            <DashboardContent 
+              filteredData={filteredData} 
+              selectedZones={selectedZones}
+              filterPanel={
+                <FilterPanel
+                  fromDate={fromDate}
+                  setFromDate={setFromDate}
+                  toDate={toDate}
+                  setToDate={setToDate}
+                  selectedProducts={selectedProducts}
+                  setSelectedProducts={setSelectedProducts}
+                  selectedZones={selectedZones}
+                  setSelectedZones={setSelectedZones}
+                  handleFilter={handleFilter}
+                  data={data}
+                />
+              }
+            />
           </div>
         </TabsContent>
 

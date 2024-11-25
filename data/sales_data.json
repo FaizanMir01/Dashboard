@@ -206,5 +206,18 @@
         "amount": 7.67,
         "discount": 0,
         "subzone": "Theni"
+    },
+    {
+        "paymentId": 868,
+        "outletId": 9389,
+        "saleDate": "01-09-2023",
+        "saleTime": "2:52 PM",
+        "product": "COLA",
+        "sku": "COLA CARBONATED 200ML",
+        "quantity": 1,
+        "unitPrice": 7.67,
+        "amount": 7.67,
+        "discount": 0,
+        "subzone": "Theni"
     }
 ]

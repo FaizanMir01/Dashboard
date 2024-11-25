@@ -1,10 +1,9 @@
 import { useState, useEffect, useCallback } from 'react'
 import { SaleData } from '@/types/SaleData'
 
-// Helper function to parse dates in dd-mm-yyyy format
+// Helper function to parse dates in yyyy-mm-dd format
 function parseDate(dateString: string): Date {
-  const [day, month, year] = dateString.split('-').map(Number)
-  return new Date(year, month - 1, day)
+  return new Date(dateString)
 }
 
 export function useFilteredData(data: SaleData[]) {
@@ -13,6 +12,7 @@ export function useFilteredData(data: SaleData[]) {
   const [toDate, setToDate] = useState<string>('')
   const [selectedProducts, setSelectedProducts] = useState<string[]>([])
   const [selectedZones, setSelectedZones] = useState<string[]>([])
+  const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null)
 
   useEffect(() => {
     setFilteredData(data)
@@ -53,8 +53,20 @@ export function useFilteredData(data: SaleData[]) {
       filtered = filtered.filter(item => selectedZones.includes(item.subzone))
     }
 
+    if (selectedDistrict) {
+      filtered = filtered.filter(item => item.subzone === selectedDistrict)
+    }
+
     setFilteredData(filtered)
-  }, [data, fromDate, toDate, selectedProducts, selectedZones])
+  }, [data, fromDate, toDate, selectedProducts, selectedZones, selectedDistrict])
+
+  const handleDistrictClick = useCallback((district: string) => {
+    setSelectedDistrict(prev => prev === district ? null : district)
+  }, [])
+
+  useEffect(() => {
+    handleFilter()
+  }, [handleFilter])
 
   return {
     filteredData,
@@ -66,6 +78,9 @@ export function useFilteredData(data: SaleData[]) {
     setSelectedProducts,
     selectedZones,
     setSelectedZones,
-    handleFilter
+    selectedDistrict,
+    setSelectedDistrict,
+    handleFilter,
+    handleDistrictClick
   }
 }

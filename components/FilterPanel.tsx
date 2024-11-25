@@ -14,22 +14,10 @@ interface FilterPanelProps {
   setSelectedProducts: React.Dispatch<React.SetStateAction<string[]>>
   selectedZones: string[]
   setSelectedZones: React.Dispatch<React.SetStateAction<string[]>>
+  selectedDistrict: string | null
+  setSelectedDistrict: React.Dispatch<React.SetStateAction<string | null>>
   handleFilter: () => void
   data: SaleData[]
-}
-
-// Helper function to format date from yyyy-mm-dd to dd-mm-yyyy
-const formatDateForInput = (dateString: string): string => {
-  if (!dateString) return ''
-  const [year, month, day] = dateString.split('-')
-  return `${day}-${month}-${year}`
-}
-
-// Helper function to parse date from dd-mm-yyyy to yyyy-mm-dd
-const parseDateFromInput = (dateString: string): string => {
-  if (!dateString) return ''
-  const [day, month, year] = dateString.split('-')
-  return `${year}-${month}-${day}`
 }
 
 export function FilterPanel({
@@ -41,6 +29,8 @@ export function FilterPanel({
   setSelectedProducts,
   selectedZones,
   setSelectedZones,
+  selectedDistrict,
+  setSelectedDistrict,
   handleFilter,
   data
 }: FilterPanelProps) {
@@ -49,13 +39,11 @@ export function FilterPanel({
   const zones = Array.from(new Set(data.map(item => item.subzone)))
 
   const handleFromDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formattedDate = formatDateForInput(e.target.value)
-    setFromDate(formattedDate)
+    setFromDate(e.target.value)
   }
 
   const handleToDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formattedDate = formatDateForInput(e.target.value)
-    setToDate(formattedDate)
+    setToDate(e.target.value)
   }
 
   return (
@@ -69,7 +57,7 @@ export function FilterPanel({
           <Input
             id="fromDate"
             type="date"
-            value={parseDateFromInput(fromDate)}
+            value={fromDate}
             onChange={handleFromDateChange}
             className="w-full"
           />
@@ -79,7 +67,7 @@ export function FilterPanel({
           <Input
             id="toDate"
             type="date"
-            value={parseDateFromInput(toDate)}
+            value={toDate}
             onChange={handleToDateChange}
             className="w-full"
           />

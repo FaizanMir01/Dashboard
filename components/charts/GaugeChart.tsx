@@ -113,39 +113,39 @@ export function GaugeChart({ title, value, max }: GaugeChartProps) {
       })
     )
 
-    // Animate chart and series
-    series.appear(1000, 100)
-    chart.appear(1000, 100)
-
-
-    const exportingMenu = am5exporting.ExportingMenu.new(root, {
-      container: chart.container,
-      pos: "top-right",
-      menuItems: [
-        {
-          label: "Export",
-          menu: [
-            { type: "png", label: "Image (PNG)" },
-            { type: "jpg", label: "Image (JPG)" },
-            { type: "pdf", label: "Document (PDF)" },
-          ]
-        }
-      ]
+    // Create export button
+    const exportButton = am5.Button.new(root, {
+      paddingTop: 5,
+      paddingRight: 5,
+      marginRight: 5,
+      icon: am5.Graphics.new(root, {
+        width: 20,
+        height: 20,
+        fill: am5.color(0x000000),
+        svgPath: "M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"
+      })
     })
+
+    chart.children.push(exportButton)
 
     // Configure exporting
     const exporting = am5exporting.Exporting.new(root, {
-      menu: exportingMenu,
       filePrefix: "gauge-chart",
       dataSource: series.data.values,
       pdfOptions: {
         addURL: true,
-        fontSize: 11,
-        image: {
-          transparentWhite: true
-        }
+        fontSize: 11
       }
     })
+
+    // Add export click handler
+    exportButton.events.on("click", () => {
+      exporting.export("png")
+    })
+
+    // Animate chart and series
+    series.appear(1000, 100)
+    chart.appear(1000, 100)
 
     // Cleanup function
     return () => {
@@ -155,10 +155,6 @@ export function GaugeChart({ title, value, max }: GaugeChartProps) {
     }
 
   }, [title, value, max])
-
-  
-
-
 
   return <div ref={chartRef} style={{ width: '100%', height: '200px' }}></div>
 }

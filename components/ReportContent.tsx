@@ -170,19 +170,30 @@ export function ReportContent({ filteredData }: { filteredData: SaleData[] }) {
   })
 
   const exportToCSV = () => {
+    // Fixed version of the export function
     const headers = columns
-      .map((col) => (typeof col.header === 'string' ? col.header : col.accessorKey))
+      .map((col) => {
+        const header = col.header
+        if (typeof header === 'string') return header
+        if ('accessorKey' in col) return String(col.accessorKey)
+        return ''
+      })
       .join(',')
+
     const rows = filteredData
       .map((row) =>
         columns
           .map((col) => {
-            const key = col.accessorKey as keyof SaleData
-            return row[key]
+            if ('accessorKey' in col) {
+              const key = col.accessorKey as keyof SaleData
+              return row[key]
+            }
+            return ''
           })
           .join(',')
       )
       .join('\n')
+
     const csv = `${headers}\n${rows}`
     const blob = new Blob([csv], { type: 'text/csv' })
     const url = window.URL.createObjectURL(blob)
@@ -203,7 +214,6 @@ export function ReportContent({ filteredData }: { filteredData: SaleData[] }) {
     a.click()
     window.URL.revokeObjectURL(url)
   }
-
   return (
     <div className="space-y-8">
       <Card>

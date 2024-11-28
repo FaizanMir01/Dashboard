@@ -1,4 +1,3 @@
-// page.tsx
 'use client'
 
 import React, { useState, useEffect } from 'react'
@@ -23,7 +22,10 @@ export default function Dashboard() {
     setSelectedProducts, 
     selectedZones, 
     setSelectedZones, 
-    handleFilter 
+    selectedDistrict,
+    setSelectedDistrict,
+    handleFilter,
+    handleDistrictClick
   } = useFilteredData(data)
 
   useEffect(() => {
@@ -44,6 +46,8 @@ export default function Dashboard() {
             <DashboardContent 
               filteredData={filteredData} 
               selectedZones={selectedZones}
+              selectedDistrict={selectedDistrict}
+              onDistrictClick={handleDistrictClick}
               filterPanel={
                 <FilterPanel
                   fromDate={fromDate}
@@ -54,6 +58,8 @@ export default function Dashboard() {
                   setSelectedProducts={setSelectedProducts}
                   selectedZones={selectedZones}
                   setSelectedZones={setSelectedZones}
+                  selectedDistrict={selectedDistrict}
+                  setSelectedDistrict={setSelectedDistrict}
                   handleFilter={handleFilter}
                   data={data}
                 />
@@ -77,6 +83,8 @@ export default function Dashboard() {
                 setSelectedProducts={setSelectedProducts}
                 selectedZones={selectedZones}
                 setSelectedZones={setSelectedZones}
+                selectedDistrict={selectedDistrict}
+                setSelectedDistrict={setSelectedDistrict}
                 handleFilter={handleFilter}
                 data={data}
               />

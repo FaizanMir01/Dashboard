@@ -1,3 +1,4 @@
+// page.tsx
 'use client'
 
 import React, { useState, useEffect } from 'react'
@@ -22,10 +23,7 @@ export default function Dashboard() {
     setSelectedProducts, 
     selectedZones, 
     setSelectedZones, 
-    selectedDistrict,
-    setSelectedDistrict,
-    handleFilter,
-    handleDistrictClick
+    handleFilter 
   } = useFilteredData(data)
 
   useEffect(() => {
@@ -46,8 +44,6 @@ export default function Dashboard() {
             <DashboardContent 
               filteredData={filteredData} 
               selectedZones={selectedZones}
-              selectedDistrict={selectedDistrict}
-              onDistrictClick={handleDistrictClick}
               filterPanel={
                 <FilterPanel
                   fromDate={fromDate}
@@ -58,11 +54,10 @@ export default function Dashboard() {
                   setSelectedProducts={setSelectedProducts}
                   selectedZones={selectedZones}
                   setSelectedZones={setSelectedZones}
-                  selectedDistrict={selectedDistrict}
-                  setSelectedDistrict={setSelectedDistrict}
                   handleFilter={handleFilter}
-                  data={data}
-                />
+                  data={data} selectedDistrict={null} setSelectedDistrict={function (value: React.SetStateAction<string | null>): void {
+                    throw new Error('Function not implemented.')
+                  } }                />
               }
             />
           </div>
@@ -83,11 +78,10 @@ export default function Dashboard() {
                 setSelectedProducts={setSelectedProducts}
                 selectedZones={selectedZones}
                 setSelectedZones={setSelectedZones}
-                selectedDistrict={selectedDistrict}
-                setSelectedDistrict={setSelectedDistrict}
                 handleFilter={handleFilter}
-                data={data}
-              />
+                data={data} selectedDistrict={null} setSelectedDistrict={function (value: React.SetStateAction<string | null>): void {
+                  throw new Error('Function not implemented.')
+                } }              />
             </div>
           </div>
         </TabsContent>

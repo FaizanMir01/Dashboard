@@ -22,6 +22,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "components/dashboard/filter", "app/page.jsx", "components/DashboardContent.jsx", "components/FilterPanel.jsx", "components/MultiSelect.jsx", "components/ReportContent.jsx", "components/ui/button.jsx", "hooks/useFilteredData.js", "lib/utils.js", "components/charts/IndiaMap.jsx", "components/charts/GaugeChart.jsx", "components/charts/MonthlyComparisonChart.jsx", "components/charts/ProductDiscountwiseChart.jsx", "components/charts/ProductQtyBarChart.jsx", "components/charts/ProductwiseDiscountChart.jsx", "components/charts/TimewiseSalesChart.jsx", "components/charts/ProductwiseQtyChart.jsx", "app/layout.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "components/dashboard/filter", "app/page.jsx", "components/DashboardContent.jsx", "components/FilterPanel.jsx", "components/MultiSelect.jsx", "components/ReportContent.jsx", "components/ui/button.jsx", "hooks/useFilteredData.js", "lib/utils.js", "components/charts/IndiaMap.jsx", "components/charts/GaugeChart.jsx", "components/charts/MonthlyComparisonChart.jsx", "components/charts/ProductDiscountwiseChart.jsx", "components/charts/ProductQtyBarChart.jsx", "components/charts/ProductwiseDiscountChart.jsx", "components/charts/TimewiseSalesChart.jsx", "components/charts/ProductwiseQtyChart.jsx", "app/layout.jsx", "next.config.js", "utils/calculations.js", "types/SaleData.js"],
   "exclude": ["node_modules"]
 }

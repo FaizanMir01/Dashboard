@@ -1,6 +1,4 @@
-// DashboardContent.tsx
 import React from 'react'
-import { SaleData } from '@/types/SaleData'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import IndiaMap from './charts/IndiaMap'
 import { TimewiseSalesChart } from './charts/TimewiseSalesChart'
@@ -12,13 +10,7 @@ import { calculateAverage } from '@/utils/calculations'
 import { ProductQuantityBarChart } from './charts/ProductQtyBarChart'
 import { MonthlyComparisonChart } from './charts/MonthlyComparisonChart'
 
-interface DashboardContentProps {
-  filteredData: SaleData[];
-  selectedZones: string[];
-  filterPanel: React.ReactNode;
-}
-
-export function DashboardContent({ filteredData, selectedZones, filterPanel }: DashboardContentProps) {
+export function DashboardContent({ filteredData, selectedZones, filterPanel }) {
   const totalSales = filteredData.reduce((acc, item) => acc + item.amount, 0)
   const totalDiscount = filteredData.reduce((acc, item) => acc + item.discount, 0)
   const totalQuantity = filteredData.reduce((acc, item) => acc + item.quantity, 0)

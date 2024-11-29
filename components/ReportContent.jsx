@@ -6,10 +6,7 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-  type ColumnDef,
-  type SortingState,
 } from '@tanstack/react-table'
-import { SaleData } from '@/types/SaleData'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -19,7 +16,7 @@ import { ProductwiseDiscountChart } from './charts/ProductwiseDiscountChart'
 import { ProductDiscountwiseChart } from './charts/ProductDiscountwiseChart'
 import { ArrowUpDown, Download } from 'lucide-react'
 
-const columns: ColumnDef<SaleData>[] = [
+const columns = [
   {
     accessorKey: 'paymentId',
     header: ({ column }) => (
@@ -100,7 +97,7 @@ const columns: ColumnDef<SaleData>[] = [
       </Button>
     ),
     cell: ({ row }) => {
-      const value = row.getValue('unitPrice') as number
+      const value = row.getValue('unitPrice')
       return `$${value.toFixed(2)}`
     },
   },
@@ -116,7 +113,7 @@ const columns: ColumnDef<SaleData>[] = [
       </Button>
     ),
     cell: ({ row }) => {
-      const value = row.getValue('amount') as number
+      const value = row.getValue('amount')
       return `$${value.toFixed(2)}`
     },
   },
@@ -132,7 +129,7 @@ const columns: ColumnDef<SaleData>[] = [
       </Button>
     ),
     cell: ({ row }) => {
-      const value = row.getValue('discount') as number
+      const value = row.getValue('discount')
       return `$${value.toFixed(2)}`
     },
   },
@@ -150,8 +147,8 @@ const columns: ColumnDef<SaleData>[] = [
   },
 ]
 
-export function ReportContent({ filteredData }: { filteredData: SaleData[] }) {
-  const [sorting, setSorting] = useState<SortingState>([])
+export function ReportContent({ filteredData }) {
+  const [sorting, setSorting] = useState([])
   const [globalFilter, setGlobalFilter] = useState('')
 
   const table = useReactTable({
@@ -170,7 +167,6 @@ export function ReportContent({ filteredData }: { filteredData: SaleData[] }) {
   })
 
   const exportToCSV = () => {
-    // Fixed version of the export function
     const headers = columns
       .map((col) => {
         const header = col.header
@@ -185,7 +181,7 @@ export function ReportContent({ filteredData }: { filteredData: SaleData[] }) {
         columns
           .map((col) => {
             if ('accessorKey' in col) {
-              const key = col.accessorKey as keyof SaleData
+              const key = col.accessorKey
               return row[key]
             }
             return ''
@@ -214,6 +210,7 @@ export function ReportContent({ filteredData }: { filteredData: SaleData[] }) {
     a.click()
     window.URL.revokeObjectURL(url)
   }
+
   return (
     <div className="space-y-8">
       <Card>
@@ -299,7 +296,7 @@ export function ReportContent({ filteredData }: { filteredData: SaleData[] }) {
           </div>
         </CardContent>
       </Card>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <Card>
           <CardHeader>

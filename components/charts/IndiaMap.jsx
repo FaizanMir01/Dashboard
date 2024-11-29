@@ -3,16 +3,12 @@ import * as am5 from '@amcharts/amcharts5';
 import * as am5map from '@amcharts/amcharts5/map';
 import * as am5exporting from "@amcharts/amcharts5/plugins/exporting";
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
-import tamilNaduGeoJson from './tamil-nadu-districts.json';
+import TamilNaduGeoJSON  from './tamil-nadu-districts.json';
 
-interface IndiaMapProps {
-  data: any[];
-  selectedZones: string[];
-}
-const IndiaMap: React.FC<IndiaMapProps> = ({ data, selectedZones }) => {
+const IndiaMap = ({ data, selectedZones }) => {
   const chartRef = useRef(null);
-  const rootRef = useRef<am5.Root | null>(null);
-  const polygonSeriesRef = useRef<am5map.MapPolygonSeries | null>(null);
+  const rootRef = useRef(null);
+  const polygonSeriesRef = useRef(null);
 
   useLayoutEffect(() => {
     if (!chartRef.current) return;
@@ -38,7 +34,7 @@ const IndiaMap: React.FC<IndiaMapProps> = ({ data, selectedZones }) => {
 
     const polygonSeries = chart.series.push(
       am5map.MapPolygonSeries.new(root, {
-        geoJSON: tamilNaduGeoJson,
+        geoJSON: TamilNaduGeoJSON,
         valueField: "value",
         calculateAggregates: true
       })
@@ -97,18 +93,18 @@ const IndiaMap: React.FC<IndiaMapProps> = ({ data, selectedZones }) => {
 
   useEffect(() => {
     if (polygonSeriesRef.current) {
-        polygonSeriesRef.current.mapPolygons.each((polygon) => {
-            const properties = polygon.dataItem?.dataContext as any;
-            const polygonId = properties?.id || properties?.Dist_Name;  // Adjust based on actual property name
-            if (polygonId && selectedZones.includes(polygonId)) {
-                polygon.set("fill", am5.color(0x4f5bbd)); // Highlight selected zones
-            } else {
-                polygon.set("fill", am5.color(0x66B6DC)); // Default color for unselected zones
-            }
-        });
+      polygonSeriesRef.current.mapPolygons.each((polygon) => {
+        const properties = polygon.dataItem?.dataContext;
+        const polygonId = properties?.id || properties?.Dist_Name;
+        if (polygonId && selectedZones.includes(polygonId)) {
+          polygon.set("fill", am5.color(0x4f5bbd)); // Highlight selected zones
+        } else {
+          polygon.set("fill", am5.color(0x66B6DC)); // Default color for unselected zones
+        }
+      });
     }
     console.log(selectedZones);
-}, [data]);
+  }, [data, selectedZones]);
 
   return (
     <div className="w-full">

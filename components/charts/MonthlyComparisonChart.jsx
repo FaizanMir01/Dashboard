@@ -6,23 +6,9 @@ import * as am5xy from '@amcharts/amcharts5/xy'
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated'
 import * as am5exporting from "@amcharts/amcharts5/plugins/exporting"
 
-interface SaleData {
-  paymentId: number
-  outletId: number
-  saleDate: string
-  saleTime: string
-  product: string
-  sku: string
-  quantity: number
-  unitPrice: number
-  amount: number
-  discount: number
-  subzone: string
-}
-
-export function MonthlyComparisonChart({ data }: { data: SaleData[] }) {
-  const chartRef = useRef<HTMLDivElement>(null)
-  const rootRef = useRef<am5.Root | null>(null)
+export function MonthlyComparisonChart({ data }) {
+  const chartRef = useRef(null)
+  const rootRef = useRef(null)
 
   useLayoutEffect(() => {
     if (!chartRef.current) return
@@ -80,8 +66,8 @@ export function MonthlyComparisonChart({ data }: { data: SaleData[] }) {
     )
 
     // Process data to group by product and month
-    const processedData = new Map<string, Map<string, number>>()
-    const allMonths = new Set<string>()
+    const processedData = new Map()
+    const allMonths = new Set()
     
     data.forEach(sale => {
       const date = new Date(sale.saleDate.split('-').reverse().join('-'))
@@ -92,7 +78,7 @@ export function MonthlyComparisonChart({ data }: { data: SaleData[] }) {
         processedData.set(product, new Map())
       }
 
-      const productData = processedData.get(product)!
+      const productData = processedData.get(product)
       productData.set(monthKey, (productData.get(monthKey) || 0) + sale.amount)
       allMonths.add(monthKey)
     })
@@ -136,7 +122,7 @@ export function MonthlyComparisonChart({ data }: { data: SaleData[] }) {
     // Add hover effect to legend
     legend.itemContainers.template.events.on("pointerover", function(e) {
       const itemContainer = e.target
-      const series = itemContainer.dataItem?.dataContext as am5xy.LineSeries
+      const series = itemContainer.dataItem?.dataContext
 
       chart.series.each(function(chartSeries) {
         if (chartSeries !== series) {

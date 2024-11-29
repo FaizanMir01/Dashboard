@@ -2,14 +2,13 @@
 
 import React, { useLayoutEffect, useRef } from 'react'
 import * as am5 from '@amcharts/amcharts5'
-import * as am5percent from '@amcharts/amcharts5/percent'
+import * as am5xy from '@amcharts/amcharts5/xy'
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated'
-import { SaleData } from '@/types/SaleData'
 import * as am5exporting from "@amcharts/amcharts5/plugins/exporting"
 
-export function ProductwiseQtyChart({ data }: { data: SaleData[] }) {
-  const chartRef = useRef<HTMLDivElement>(null)
-  const rootRef = useRef<am5.Root | null>(null)
+export function TimewiseSalesChart({ data }) {
+  const chartRef = useRef(null)
+  const rootRef = useRef(null)
 
   useLayoutEffect(() => {
     if (!chartRef.current) return
@@ -28,45 +27,58 @@ export function ProductwiseQtyChart({ data }: { data: SaleData[] }) {
 
     // Create chart
     const chart = root.container.children.push(
-      am5percent.PieChart.new(root, {
-        radius: am5.percent(90),
-        innerRadius: am5.percent(50)
+      am5xy.XYChart.new(root, {
+        panX: true,
+        panY: true,
+        wheelX: "panX",
+        wheelY: "zoomX"
+      })
+    )
+
+    // Create axes
+    const xAxis = chart.xAxes.push(
+      am5xy.DateAxis.new(root, {
+        baseInterval: { timeUnit: "hour", count: 1 },
+        renderer: am5xy.AxisRendererX.new(root, {}),
+        tooltip: am5.Tooltip.new(root, {})
+      })
+    )
+
+    const yAxis = chart.yAxes.push(
+      am5xy.ValueAxis.new(root, {
+        renderer: am5xy.AxisRendererY.new(root, {})
       })
     )
 
     // Create series
     const series = chart.series.push(
-      am5percent.PieSeries.new(root, {
-        name: "Quantity",
-        valueField: "quantity",
-        categoryField: "product",
+      am5xy.LineSeries.new(root, {
+        name: "Sales",
+        xAxis: xAxis,
+        yAxis: yAxis,
+        valueYField: "amount",
+        valueXField: "date",
         tooltip: am5.Tooltip.new(root, {
-          labelText: "{category}: {value}"
+          labelText: "${valueY}"
         })
       })
     )
 
     // Set data
-    const processedData = Object.entries(
-      data.reduce((acc: { [key: string]: number }, item) => {
-        acc[item.product] = (acc[item.product] || 0) + item.quantity
-        return acc
-      }, {})
-    ).map(([product, quantity]) => ({ product, quantity }))
+    const processedData = data.map(item => ({
+      date: new Date(`${item.saleDate} ${item.saleTime}`).getTime(),
+      amount: item.amount
+    })).sort((a, b) => a.date - b.date)
 
     series.data.setAll(processedData)
 
-    // Add legend
-    const legend = chart.children.push(am5.Legend.new(root, {
-      centerX: am5.percent(50),
-      x: am5.percent(50),
-      layout: root.horizontalLayout
-    }))
+    // Add cursor
+    chart.set("cursor", am5xy.XYCursor.new(root, {}))
 
-    legend.data.setAll(series.dataItems)
+    // Make stuff animate on load
+    series.appear(1000)
+    chart.appear(1000, 100)
 
-    // Play initial series animation
-    series.appear(1000, 100)
     const exportingMenu = am5exporting.ExportingMenu.new(root, {
       container: chart.container,
       pos: "top-right",
@@ -87,7 +99,7 @@ export function ProductwiseQtyChart({ data }: { data: SaleData[] }) {
     // Configure exporting
     const exporting = am5exporting.Exporting.new(root, {
       menu: exportingMenu,
-      filePrefix: "productwise-quantities",
+      filePrefix: "timewise-sales",
       dataSource: series.data.values,
       pdfOptions: {
         addURL: true,
@@ -96,7 +108,8 @@ export function ProductwiseQtyChart({ data }: { data: SaleData[] }) {
           transparentWhite: true
         }
       },
-      numericFields: ["quantity"]
+      numericFields: ["amount"],
+      dateFields: ["date"]
     })
 
     // Cleanup function

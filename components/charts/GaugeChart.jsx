@@ -6,15 +6,9 @@ import * as am5percent from '@amcharts/amcharts5/percent'
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated'
 import * as am5exporting from "@amcharts/amcharts5/plugins/exporting"
 
-interface GaugeChartProps {
-  title: string
-  value: number
-  max: number
-}
-
-export function GaugeChart({ title, value, max }: GaugeChartProps) {
-  const chartRef = useRef<HTMLDivElement>(null)
-  const rootRef = useRef<am5.Root | null>(null)
+export function GaugeChart({ title, value, max }) {
+  const chartRef = useRef(null)
+  const rootRef = useRef(null)
 
   useLayoutEffect(() => {
     if (!chartRef.current) return

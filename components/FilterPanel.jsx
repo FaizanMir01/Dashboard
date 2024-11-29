@@ -3,22 +3,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { MultiSelect } from './MultiSelect'
-import { SaleData } from '@/types/SaleData'
-
-interface FilterPanelProps {
-  fromDate: string
-  setFromDate: (date: string) => void
-  toDate: string
-  setToDate: (date: string) => void
-  selectedProducts: string[]
-  setSelectedProducts: React.Dispatch<React.SetStateAction<string[]>>
-  selectedZones: string[]
-  setSelectedZones: React.Dispatch<React.SetStateAction<string[]>>
-  selectedDistrict: string | null
-  setSelectedDistrict: React.Dispatch<React.SetStateAction<string | null>>
-  handleFilter: () => void
-  data: SaleData[]
-}
 
 export function FilterPanel({
   fromDate,
@@ -33,16 +17,16 @@ export function FilterPanel({
   setSelectedDistrict,
   handleFilter,
   data
-}: FilterPanelProps) {
+}) {
   
   const products = Array.from(new Set(data.map(item => item.product)))
   const zones = Array.from(new Set(data.map(item => item.subzone)))
 
-  const handleFromDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFromDateChange = (e) => {
     setFromDate(e.target.value)
   }
 
-  const handleToDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleToDateChange = (e) => {
     setToDate(e.target.value)
   }
 

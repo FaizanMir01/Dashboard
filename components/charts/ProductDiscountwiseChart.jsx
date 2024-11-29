@@ -6,11 +6,11 @@ import * as am5xy from '@amcharts/amcharts5/xy'
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated'
 import * as am5exporting from "@amcharts/amcharts5/plugins/exporting"
 import { Button } from "@/components/ui/button"
-import { ArrowUpDown } from "lucide-react"
+import { ArrowUpDown } from 'lucide-react'
 
-export function ProductQuantityBarChart({ data }: { data: SaleData[] }) {
-  const chartRef = useRef<HTMLDivElement>(null)
-  const rootRef = useRef<am5.Root | null>(null)
+export function ProductDiscountwiseChart({ data }) {
+  const chartRef = useRef(null)
+  const rootRef = useRef(null)
   const [isAscending, setIsAscending] = useState(false)
 
   useLayoutEffect(() => {
@@ -35,7 +35,6 @@ export function ProductQuantityBarChart({ data }: { data: SaleData[] }) {
         panY: true,
         wheelX: "panX",
         wheelY: "zoomX",
-        pinchZoomX: true
       })
     )
 
@@ -59,36 +58,38 @@ export function ProductQuantityBarChart({ data }: { data: SaleData[] }) {
     // Create series
     const series = chart.series.push(
       am5xy.ColumnSeries.new(root, {
-        name: "Quantity",
+        name: "Discount",
         xAxis: xAxis,
         yAxis: yAxis,
-        valueYField: "quantity",
+        valueYField: "discount",
         categoryXField: "product",
         tooltip: am5.Tooltip.new(root, {
-          labelText: "{categoryX}: {valueY}"
+          labelText: "${valueY}"
         })
       })
     )
 
     // Process and sort data
     const processedData = Object.entries(
-      data.reduce((acc: { [key: string]: number }, item) => {
-        acc[item.product] = (acc[item.product] || 0) + item.quantity
+      data.reduce((acc, item) => {
+        acc[item.product] = (acc[item.product] || 0) + item.discount
         return acc
       }, {})
     )
-      .map(([product, quantity]) => ({ product, quantity }))
+      .map(([product, discount]) => ({ product, discount }))
       .sort((a, b) => 
         isAscending 
-          ? a.quantity - b.quantity 
-          : b.quantity - a.quantity
+          ? a.discount - b.discount 
+          : b.discount - a.discount
       )
 
     xAxis.data.setAll(processedData)
     series.data.setAll(processedData)
 
-    // Customize x-axis labels
+    // Customize axis labels
     xAxis.get("renderer").labels.template.setAll({
+      oversizedBehavior: "wrap",
+      maxWidth: 150,
       rotation: -45,
       centerY: am5.p50,
       centerX: am5.p100,
@@ -96,15 +97,12 @@ export function ProductQuantityBarChart({ data }: { data: SaleData[] }) {
     })
 
     // Add cursor
-    chart.set("cursor", am5xy.XYCursor.new(root, {
-      behavior: "zoomX"
-    }))
+    chart.set("cursor", am5xy.XYCursor.new(root, {}))
 
     // Make stuff animate on load
     series.appear(1000)
     chart.appear(1000, 100)
 
-    // Add export menu
     const exportingMenu = am5exporting.ExportingMenu.new(root, {
       container: chart.container,
       pos: "top-right",
@@ -125,7 +123,7 @@ export function ProductQuantityBarChart({ data }: { data: SaleData[] }) {
     // Configure exporting
     const exporting = am5exporting.Exporting.new(root, {
       menu: exportingMenu,
-      filePrefix: "product-quantity-barchart",
+      filePrefix: "product-discounts",
       dataSource: series.data.values,
       pdfOptions: {
         addURL: true,
@@ -134,7 +132,7 @@ export function ProductQuantityBarChart({ data }: { data: SaleData[] }) {
           transparentWhite: true
         }
       },
-      numericFields: ["quantity"]
+      numericFields: ["discount"]
     })
 
     // Cleanup function
@@ -154,10 +152,10 @@ export function ProductQuantityBarChart({ data }: { data: SaleData[] }) {
           className="flex items-center gap-2"
         >
           <ArrowUpDown className="h-4 w-4" />
-          Sort {isAscending ? "Descending" : "Ascending"}
+          Sort Discounts {isAscending ? "Descending" : "Ascending"}
         </Button>
       </div>
-      <div ref={chartRef} style={{ width: '100%', height: '400px' }}></div>
+      <div ref={chartRef} style={{ width: '100%', height: '300px' }}></div>
     </div>
   )
 }

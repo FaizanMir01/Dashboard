@@ -4,14 +4,13 @@ import React, { useLayoutEffect, useRef, useState } from 'react'
 import * as am5 from '@amcharts/amcharts5'
 import * as am5xy from '@amcharts/amcharts5/xy'
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated'
-import { SaleData } from '@/types/SaleData'
 import * as am5exporting from "@amcharts/amcharts5/plugins/exporting"
 import { Button } from "@/components/ui/button"
-import { ArrowUpDown } from "lucide-react"
+import { ArrowUpDown } from 'lucide-react'
 
-export function ProductwiseDiscountChart({ data }: { data: SaleData[] }) {
-  const chartRef = useRef<HTMLDivElement>(null)
-  const rootRef = useRef<am5.Root | null>(null)
+export function ProductwiseDiscountChart({ data }) {
+  const chartRef = useRef(null)
+  const rootRef = useRef(null)
   const [isAscending, setIsAscending] = useState(false)
 
   useLayoutEffect(() => {
@@ -74,7 +73,7 @@ export function ProductwiseDiscountChart({ data }: { data: SaleData[] }) {
 
     // Process and sort data
     const processedData = Object.entries(
-      data.reduce((acc: { [key: string]: number }, item) => {
+      data.reduce((acc, item) => {
         acc[item.product] = (acc[item.product] || 0) + item.discount
         return acc
       }, {})

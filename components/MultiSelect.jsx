@@ -9,15 +9,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
-interface MultiSelectProps {
-  id?: string // Add this line to include the id prop
-  options: string[]
-  selected: string[]
-  setSelected: React.Dispatch<React.SetStateAction<string[]>>
-  placeholder: string
-}
-
-export function MultiSelect({ id, options, selected, setSelected, placeholder }: MultiSelectProps) {
+export function MultiSelect({ id, options, selected, setSelected, placeholder }) {
   const [open, setOpen] = React.useState(false)
   const [search, setSearch] = React.useState('')
 
@@ -25,7 +17,7 @@ export function MultiSelect({ id, options, selected, setSelected, placeholder }:
     option.toLowerCase().includes(search.toLowerCase())
   )
 
-  const handleSelect = (option: string) => {
+  const handleSelect = (option) => {
     setSelected(prev =>
       prev.includes(option)
         ? prev.filter(item => item !== option)
@@ -33,7 +25,7 @@ export function MultiSelect({ id, options, selected, setSelected, placeholder }:
     )
   }
 
-  const handleRemove = (option: string) => {
+  const handleRemove = (option) => {
     setSelected(prev => prev.filter(item => item !== option))
   }
 
@@ -41,7 +33,7 @@ export function MultiSelect({ id, options, selected, setSelected, placeholder }:
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          id={id} // Add this line to use the id prop
+          id={id}
           variant="outline"
           role="combobox"
           aria-expanded={open}
